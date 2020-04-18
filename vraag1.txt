@@ -1,0 +1,2 @@
+Eigenwaarden van (A-mu*I) geeft de eigenwaarden p eigenwaarden het verst van mu liggen. Eigenwaarden van (A-mu*I)^-1 convergeert dus naar de p het dichtst bij. Aangezien de inverse matrix ook inverse eigenwaarden heeft. De eigenvectoren blijven onder alle operaties onveranderd
+

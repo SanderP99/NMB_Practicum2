@@ -1,0 +1,116 @@
+\documentclass[a4paper, 12pt, titlepage, fleqn]{article}
+
+%Taal: Nederlands ("Inhoudsopgave", "Hoofdstuk",...)
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{amsmath, amssymb, textcomp, mathtools}
+\usepackage{geometry}
+	\geometry{a4paper, left=20mm, right=20mm, top=20mm, bottom=20mm}
+\setlength{\mathindent}{1cm}
+%Hyperlinks
+\usepackage{hyperref}
+\usepackage{subcaption}
+
+%Opmaak hyperlinks
+\hypersetup{colorlinks=false,	urlcolor=cyan,pdfborder=0 0 0}
+\usepackage[framed,numbered,autolinebreaks,useliterate]{mcode}
+%geen indents
+\setlength\parindent{0pt}
+\usepackage{listings}
+\lstset{
+language=Matlab, % choose the language of the code
+%basicstyle=10pt, % the size of the fonts that are used for the code
+numbers=left, % where to put the line-numbers
+numberstyle=\footnotesize, % the size of the fonts that are used for the line-numbers
+stepnumber=1, % the step between two line-numbers. If it's 1 each line will be numbered
+numbersep=5pt, % how far the line-numbers are from the code
+%backgroundcolor=\color{grey}, % choose the background color. You must add \usepackage{color}
+showspaces=false, % show spaces adding particular underscores
+showstringspaces=false, % underline spaces within strings
+showtabs=false, % show tabs within strings adding particular underscores
+frame=single, % adds a frame around the code
+%tabsize=2, % sets default tabsize to 2 spaces
+captionpos=b, % sets the caption-position to bottom
+breaklines=true, % sets automatic line breaking
+breakatwhitespace=false, % sets if automatic breaks should only happen at whitespace
+escapeinside={\%*}{*)} % if you want to add a comment within your code
+}
+
+\captionsetup{
+   font=small,          % Select font size
+   margin=3em,          % Margin, left and right
+   tableposition=top    % Formatting for captions above tables
+}
+
+\newcounter{nalg}[section] % defines algorithm counter for chapter-level
+%\renewcommand{\thenalg}{\thechapter .\arabic{nalg}} %defines appearance of the algorithm counter
+\DeclareCaptionLabelFormat{algocaption}{Algoritme \thenalg} % defines a new caption label as Algorithm x.y
+
+\lstnewenvironment{algorithm}[1][] %defines the algorithm listing environment
+{   
+    \refstepcounter{nalg} %increments algorithm number
+    \captionsetup{labelformat=algocaption} %defines the caption setup for: it ises label format as the declared caption label above and makes label and caption text to be separated by a ':'
+    \lstset{ %this is the stype
+        mathescape=true,
+        frame=tblr,
+        numbers=left, 
+        numberstyle=\tiny,
+        basicstyle=\scriptsize, 
+        keywordstyle=\color{black}\bfseries,
+        keywords={,input, output, return, datatype, function, in, if, else, foreach, while, begin, end, for, do, } %add the keywords you want, or load a language as Rubens explains in his comment above.
+        numbers=left,
+        xleftmargin=.04\textwidth,
+        #1 % this is to add specific settings to an usage of this environment (for instnce, the caption and referable label)
+    }
+}
+{}
+
+\usepackage[dutch]{babel}
+\begin{document}
+
+\title{\textbf{Numerieke Modellering en Benadering: Eigenwaardeproblemen en iteratieve methoden}}
+\author{Sander Prenen, r0701014}
+
+\date{20 mei 2020}
+\begin{titlepage}
+	\maketitle
+	\thispagestyle{empty}
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\listoffigures
+\newpage
+
+\section{Inleiding}
+In dit verslag worden verschillenden methodes bestudeerd om eigenwaardenproblemen op te lossen.
+
+\section{Gelijktijdige iteratie}
+Bij gelijktijdige iteratie of 'simultaneous iteration' wordt de methode van de machten toegepast op $p$ kolommen tegelijk. De methode convergeert naar de $p$ grootste eigenwaarden en de bijhorende eigenvectoren. Door de methode licht te wijzigen, kunnen de $p$ eigenwaarden van een symmetrische niet-singuliere matrix $A$, die het dichtst bij een gegeven waarde $\mu$ liggen, bepaald worden. Hiervoor wordt verondersteld dat $\mu$ geen eigenwaarde is van $A$. Het algoritme kan hiervoor gebruikt worden als de $p$ eigenwaarden het dichtst bij $\mu$ ook de $p$ grootste eigenwaarden zijn. Hiervoor kan gezorgd worden door de matrix $A$ te vervangen door $A - \mu I$. Deze matrix heeft eigenwaarden die $\mu$ lager liggen dan de eigenwaarden van de originele matrix $A$. Dit kan als volgt worden ingezien. De originele eigenwaarden $\lambda_o$ zijn de oplossing van volgende vergelijking:
+\begin{align*}
+\det (A-\lambda_o I) = 0
+\end{align*}
+De eigenwaarden $\lambda_n$ van de nieuwe matrix zijn de oplossingen van onderstaande vergelijking:
+\begin{align*}
+\det (A - \mu I - \lambda_n I) = 0 \Leftrightarrow \det(A -(\mu + \lambda_n)I) = 0
+\end{align*}
+Dit leidt tot volgende gelijkheid $\lambda_o = \mu + \lambda_n$. Dit betekent dat de nieuwe eigenwaarden $\lambda_n$ inderdaad $\mu$ lager liggen dan de originele eigenwaarden $\lambda_o$.\\
+Nu zijn de $p$ gezochte eigenwaarden de kleinste van alle eigenwaarden. Om er voor te zorgen dat ze de $p$ grootste eigenwaarden worden, wordt de inverse matrix gebruikt. De inverse matrix heeft namelijk als eigenwaarden de reciproke eigenwaarden van de originele matrix.
+\begin{align*}
+Ax &= \lambda x\\
+A\frac{1}{\lambda}x &= x\\
+A^{-1}A\frac{1}{\lambda}x &= A^{-1}x\\
+\frac{1}{\lambda}x &= A^{-1}x
+\end{align*}
+Nu zijn de $p$ eigenwaarden die het dichtst bij $\mu$ liggen de grootste eigenwaarden van de matrix en kan de methode van gelijktijdige iteratie gebruikt worden. In algoritme \ref{alg:gelijktijdige iteratie} kan de pseudocode voor deze methode gevonden worden. De kolommen van $\hat{Q}^{(k)}$ convergeren naar de eigenvectoren horende bij de eigenwaarden.
+
+\begin{algorithm}[caption={Gelijktijdige iteratie}, label={alg:gelijktijdige iteratie}]
+Kies $\hat{Q}^{(0)} \in \mathbb{R}^{m\times n}$ met orthonormale kolommen
+for $k = 1,2,\ldots$ do
+	$Z = (A-\mu I)^{-1}\hat{Q}^{(k-1)}$
+	$\hat{Q}^{(k)}\hat{R}^{(k)} = Z$
+end
+\end{algorithm}
+% TODO: niet convergeren
+
+\end{document}

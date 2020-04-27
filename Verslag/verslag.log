@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=latex 2020.1.8)  19 APR 2020 12:05
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=latex 2020.1.8)  27 APR 2020 12:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -590,28 +590,54 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
  [1]
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
 nput line 107.
+ [2]
+Underfull \hbox (badness 10000) in paragraph at lines 123--125
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 129--131
+
+ []
+
+[3]
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 169.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 169.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 169.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 169.
 
 
 Package caption Warning: Unused \captionsetup[sub] on input line 13.
 See the caption package documentation for explanation.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 116.
-[2]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 116.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 190.
+[4]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 190.
  (./verslag.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 116.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 116.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 190.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 190.
 Package rerunfilecheck Info: File `verslag.out' has not changed.
-(rerunfilecheck)             Checksum: D7B84CEACDD7436B153DA8618985E9E4;101.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 116.
+(rerunfilecheck)             Checksum: B169961DCB04B83196CF62C5C10B789C;501.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 190.
  ) 
 Here is how much of TeX's memory you used:
- 10300 strings out of 494300
- 152981 string characters out of 6163422
- 291965 words of memory out of 5000000
- 13533 multiletter control sequences out of 15000+600000
- 14089 words of font info for 55 fonts, out of 8000000 for 9000
+ 10315 strings out of 494300
+ 153170 string characters out of 6163422
+ 293965 words of memory out of 5000000
+ 13547 multiletter control sequences out of 15000+600000
+ 14733 words of font info for 57 fonts, out of 8000000 for 9000
  372 hyphenation exceptions out of 8191
- 42i,8n,42p,916b,1075s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,14n,42p,900b,1075s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on verslag.dvi (3 pages, 11156 bytes).
+Output written on verslag.dvi (5 pages, 23512 bytes).

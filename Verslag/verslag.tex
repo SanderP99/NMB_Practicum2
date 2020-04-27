@@ -102,15 +102,89 @@ A\frac{1}{\lambda}x &= x\\
 A^{-1}A\frac{1}{\lambda}x &= A^{-1}x\\
 \frac{1}{\lambda}x &= A^{-1}x
 \end{align*}
-Nu zijn de $p$ eigenwaarden die het dichtst bij $\mu$ liggen de grootste eigenwaarden van de matrix en kan de methode van gelijktijdige iteratie gebruikt worden. In algoritme \ref{alg:gelijktijdige iteratie} kan de pseudocode voor deze methode gevonden worden. De kolommen van $\hat{Q}^{(k)}$ convergeren naar de eigenvectoren horende bij de eigenwaarden.
+Nu zijn de $p$ eigenwaarden die het dichtst bij $\mu$ liggen de grootste eigenwaarden van de matrix en kan de methode van gelijktijdige iteratie gebruikt worden. In algoritme \ref{alg:gelijktijdige iteratie} kan de pseudocode voor deze methode gevonden worden. De kolommen van $\hat{Q}^{(k)}$ convergeren naar de eigenvectoren horende bij de eigenwaarden. Op deze kolommen $q^{(k)}$ wordt het Rayleigh quoti\"ent toegepast om de bijbehorende eigenwaarden te benaderen.
 
 \begin{algorithm}[caption={Gelijktijdige iteratie}, label={alg:gelijktijdige iteratie}]
 Kies $\hat{Q}^{(0)} \in \mathbb{R}^{m\times n}$ met orthonormale kolommen
 for $k = 1,2,\ldots$ do
 	$Z = (A-\mu I)^{-1}\hat{Q}^{(k-1)}$
 	$\hat{Q}^{(k)}\hat{R}^{(k)} = Z$
+	$\lambda^{(k)} = q^{(k)^\intercal}(A -\mu I)^{-1}q^{(k)}$
 end
+
 \end{algorithm}
 % TODO: niet convergeren
 
+\section{Inverse iteratie en Rayleigh quoti\"ent iteratie}
+\subsection{Rayleigh quoti\"ent iteratie}
+Om eigenwaarden te benaderen kan de Rayleigh quoti\"ent iteratie gebruikt worden. Deze methode convergeert kubisch naar de correct waarde. Elke iteratiestap moet het volgende stelsel opgelost worden:
+\begin{align*}
+(A - \lambda^{(k-1)}I)w = v^{(k-1)}
+\end{align*}
+Indien de benaderende eigenwaarde $\lambda^{(k-1)}$ dicht in de buurt komt van de exacte eigenwaarde, wordt dit stelsel meer en meer singulier. Hierdoor kan de oplossing $w$ van dit stelsel opblazen. Dit vormt echter geen proleem voor de iteratie aangezien $w$ genormeerd wordt. Enkel de richting van de vector $w$ is dus belangrijk en deze wordt niet veranderd.\\
+
+Er kan aangetoond worden dat voor een matrix $A \in \mathbb{R}^{n\times n}$ en een vector $x \in \mathbb{R}^{n \times 1}$, met $x$ een benadering voor een eigenvector van $A$, de oplossing $\rho \in \mathbb{R}$ van het volgende minimalisatieprobleem
+\begin{align*}
+\min_{\rho \in \mathbb{R}} \| Ax - \rho x\|_2
+\end{align*}
+overeenkomt met het Rayleigh quoti\"ent van $x$. \\
+
+De functie $f(\rho) = \|Ax-\rho x\|_2 = (Ax-\rho x)^\intercal(Ax-\rho x)$ moet geminimaliseerd worden.\\ De afgeleide $f'(\rho)$ moet dus nul zijn.
+\begin{align*}
+(Ax-\rho x)^\intercal (Ax-\rho x) &= x^\intercal A^\intercal Ax - x^\intercal A^\intercal\rho x - x^\intercal\rho Ax + \rho^2x^\intercal x\\
+&= x^\intercal A^\intercal Ax -2\rho x^\intercal Ax + \rho^2x^\intercal x
+\end{align*}
+Deze vergelijking afleiden naar $\rho$ en gelijk stellen aan nul geeft volgende uitdrukking:
+\begin{align*}
+-2x^\intercal Ax + 2\rho x^\intercal x = 0 \Leftrightarrow \rho = \frac{x^\intercal Ax}{x^\intercal x}
+\end{align*}
+Deze laatste uitdrukking is inderdaad het Rayleigh quoti\"ent.
+
+\subsection{Vergelijking inverse iteratie en Rayleigh quoti\"ent iteratie}
+Door de kubische convergentie van de Rayleigh quoti\"ent iteratie heeft deze methode vaak de voorkeur over de inverse iteratie. Toch zijn er ook gevallen waar de inverse iteratie de voorkeur geniet. Er worden in deze tekst twee gevallen besproken:
+\begin{itemize}
+\item \underline{De matrix $A \in \mathbb{R}^{m\times m}$ is (zeer) groot:} In elke iteratiestap van de Rayleigh quoti\"ent iteratie moet een nieuwe matrix ge\"inverteerd worden. Hierdoor zijn er $\mathcal{O}(m^3)$ flops nodig per stap. Voor de inverse iteratie moet er een lineair stelsel worden opgelost in elke stap. Dit lijkt op het eerste zicht $\mathcal{O}(m^3)$ flops te vragen, maar als de matrix $A$ op $QR$-gefactoriseerd is, vermindert het aantal flops naar $\mathcal{O}(m^2)$. Hierdoor is de inverse iteratie beter geschikt voor grote matrices.
+\item \underline{De spectrale eigenschappen van $A$ zijn nauwelijks gekend}: Het doel is om een eigenpaar te vinden die het dichtst bij $\mu \in \mathbb{R}$ ligt, maar een goede startwaarde voor de eigenvector is niet gekend. De Rayleigh quoti\"ent iteratie vertrekt van een startwaarde van een eigenvector. Deze startwaarde is hier niet gekend dus is de inverse iteratie, die vertrekt van een startwaarde voor de eigenwaarde, beter geschikt.
+\end{itemize}
+
+\section{Jacobi-methode}
+De Jacobi-methode steunt op de diagonalisatie van $2 \times 2$ symmetrische matrices met behulp van een orthogonale matrix $J$,
+\begin{align}\label{eq:jacobi}
+J^T\left[\begin{matrix}
+a &d\\
+d &b
+\end{matrix}\right]J = \left[ \begin{matrix}
+\neq 0 &0\\
+0 &\neq 0
+\end{matrix}\right]
+\end{align}
+Hierbij wordt de orthogonale matrix $J$ gedefinieerd als een rotatie-matrix:
+\begin{align}\label{eq:cs}
+J  = \left[\begin{matrix}
+c &s\\
+-s &c
+\end{matrix}\right]
+\end{align}
+
+\subsection{De co\"effici\"enten $c$ en $s$}
+In deze sectie worden de co\"effici\"enten $c$ en $s$ van de matrix $J$ uit vergelijking (\ref{eq:cs}) bepaald zodat (\ref{eq:jacobi}) geldt. Aangezien $J$ een rotatie-matrix is, is de determinant van $j$ gelijk aan 1.
+\begin{align*}
+\det J = c^2 + s^2 = 1
+\end{align*}
+Volgende oplossing is een oplossing van het stelsel:
+\begin{align*}
+\begin{cases}
+c = \cos(\theta)\\
+s = \sin(\theta)
+\end{cases}
+\end{align*}
+Indien de niet-diagonaal elementen in vergelijking~(\ref{eq:jacobi}) worden bepaald, wordt volgende uitdrukking verkregen:
+\begin{align*}
+\frac{1}{2}\sin(2\theta)(a-b) + d\cos(2\theta) = 0
+\end{align*}
+Hieruit kan $\theta$ gehaald worden:
+\begin{align*}
+\theta = \frac{1}{2}\arctan\left(\frac{2d}{b-a}\right)
+\end{align*}
+Als $a$ gelijk is aan $b$ wordt $\theta$ gelijk aan $\frac{\pi}{4}$ aangezien voor deze hoek de boogtangens oneindig wordt.
 \end{document}

@@ -3,6 +3,8 @@
 \contentsline {section}{\numberline {2}Gelijktijdige iteratie}{2}{section.2}
 \contentsline {section}{\numberline {3}Inverse iteratie en Rayleigh quoti\"ent iteratie}{3}{section.3}
 \contentsline {subsection}{\numberline {3.1}Rayleigh quoti\"ent iteratie}{3}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Vergelijking inverse iteratie en Rayleigh quoti\"ent iteratie}{3}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.2}Vergelijking inverse iteratie en Rayleigh quoti\"ent iteratie}{4}{subsection.3.2}
 \contentsline {section}{\numberline {4}Jacobi-methode}{4}{section.4}
 \contentsline {subsection}{\numberline {4.1}De co\"effici\"enten $c$ en $s$}{4}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Eigenwaardeontbinding}{5}{subsection.4.2}
+\contentsline {section}{\numberline {5}Geconjugeerde gradi\"enten}{8}{section.5}

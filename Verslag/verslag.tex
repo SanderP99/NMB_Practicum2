@@ -42,7 +42,7 @@ escapeinside={\%*}{*)} % if you want to add a comment within your code
    tableposition=top    % Formatting for captions above tables
 }
 
-\newcounter{nalg}[section] % defines algorithm counter for chapter-level
+\newcounter{nalg} % defines algorithm counter for chapter-level
 %\renewcommand{\thenalg}{\thechapter .\arabic{nalg}} %defines appearance of the algorithm counter
 \DeclareCaptionLabelFormat{algocaption}{Algoritme \thenalg} % defines a new caption label as Algorithm x.y
 
@@ -83,9 +83,11 @@ escapeinside={\%*}{*)} % if you want to add a comment within your code
 \newpage
 
 \section{Inleiding}
-In dit verslag worden verschillenden methodes bestudeerd om eigenwaardenproblemen op te lossen.
+In dit verslag worden verschillenden methodes bestudeerd om eigenwaardenproblemen op te lossen. In sectie \ref{sec:gelijktijdige iteratie} wordt de gelijktijdige iteratie bekeken en wordt het algoritme aangepast om de eigenwaarden te vinden dicht bij een gegeven waarde. In sectie \ref{sec:inverse iteratie} wordt zowel de inverse iteratie als de Rayleigh-iteratie bekeken en worden ze vergeleken. Vervolgens wordt in sectie \ref{sec: jacobi} de Jacobi-methode bekeken en deze methode wordt in MATLAB ge\"implementeerd. Ten slotte wordt in sectie \ref{sec: geconjugeerde gradienten} de methode van de geconjugeerde gradi\"enten bekeken en de bijbehorende convergentiesnelheid.
 
-\section{Gelijktijdige iteratie}
+\section{Gelijktijdige iteratie}\label{sec:gelijktijdige iteratie}
+\underline{\textbf{Opgave 1a}}\\
+
 Bij gelijktijdige iteratie of 'simultaneous iteration' wordt de methode van de machten toegepast op $p$ kolommen tegelijk. De methode convergeert naar de $p$ grootste eigenwaarden en de bijhorende eigenvectoren. Door de methode licht te wijzigen, kunnen de $p$ eigenwaarden van een symmetrische niet-singuliere matrix $A$, die het dichtst bij een gegeven waarde $\mu$ liggen, bepaald worden. Hiervoor wordt verondersteld dat $\mu$ geen eigenwaarde is van $A$. Het algoritme kan hiervoor gebruikt worden als de $p$ eigenwaarden het dichtst bij $\mu$ ook de $p$ grootste eigenwaarden zijn. Hiervoor kan gezorgd worden door de matrix $A$ te vervangen door $A - \mu I$. Deze matrix heeft eigenwaarden die $\mu$ lager liggen dan de eigenwaarden van de originele matrix $A$. Dit kan als volgt worden ingezien. De originele eigenwaarden $\lambda_o$ zijn de oplossing van volgende vergelijking:
 \begin{align*}
 \det (A-\lambda_o I) = 0
@@ -111,17 +113,27 @@ for $k = 1,2,\ldots$ do
 	$\hat{Q}^{(k)}\hat{R}^{(k)} = Z$
 	$\lambda^{(k)} = q^{(k)^\intercal}(A -\mu I)^{-1}q^{(k)}$
 end
-
 \end{algorithm}
-% TODO: niet convergeren
 
-\section{Inverse iteratie en Rayleigh quoti\"ent iteratie}
+\underline{\textbf{Opgave 1b}}\\
+
+Wanneer twee eigenwaarden even ver van $\mu$ verwijderd liggen, kan de methode in sommige gevallen niet convergeren. De waarde in de verschillende iteratiestappen van de berkende eigenwaarde $\lambda^{(k)}$ voldoet namelijk aan de volgende gelijkheid:
+\begin{align*}
+|\lambda^{(k)} - \lambda_J| = \mathcal{O}\left(\left|\frac{\mu - \lambda_J}{\mu - \lambda_K}\right|^{2k}\right)
+\end{align*} 
+Als de eigenwaarden $\lambda_J$ en $\lambda_K$, die het dichtst bij $\mu$ liggen, gelijk zijn convergeert de methode niet. Door de eindige precisie van een computer zal de deling in het rechterlid van de vergelijking bijna nooit exact 1 geven. Hierdoor zal het in de meeste gevallen wel convergeren.
+
+\section{Inverse iteratie en Rayleigh quoti\"ent iteratie}\label{sec:inverse iteratie}
 \subsection{Rayleigh quoti\"ent iteratie}
+\underline{\textbf{Opgave 2a}}\\
+
 Om eigenwaarden te benaderen kan de Rayleigh quoti\"ent iteratie gebruikt worden. Deze methode convergeert kubisch naar de correct waarde. Elke iteratiestap moet het volgende stelsel opgelost worden:
 \begin{align*}
 (A - \lambda^{(k-1)}I)w = v^{(k-1)}
 \end{align*}
 Indien de benaderende eigenwaarde $\lambda^{(k-1)}$ dicht in de buurt komt van de exacte eigenwaarde, wordt dit stelsel meer en meer singulier. Hierdoor kan de oplossing $w$ van dit stelsel opblazen. Dit vormt echter geen proleem voor de iteratie aangezien $w$ genormeerd wordt. Enkel de richting van de vector $w$ is dus belangrijk en deze wordt niet veranderd.\\
+
+\underline{\textbf{Opgave 2b}}\\
 
 Er kan aangetoond worden dat voor een matrix $A \in \mathbb{R}^{n\times n}$ en een vector $x \in \mathbb{R}^{n \times 1}$, met $x$ een benadering voor een eigenvector van $A$, de oplossing $\rho \in \mathbb{R}$ van het volgende minimalisatieprobleem
 \begin{align*}
@@ -141,13 +153,15 @@ Deze vergelijking afleiden naar $\rho$ en gelijk stellen aan nul geeft volgende 
 Deze laatste uitdrukking is inderdaad het Rayleigh quoti\"ent.
 
 \subsection{Vergelijking inverse iteratie en Rayleigh quoti\"ent iteratie}
+\underline{\textbf{Opgave 3}}\\
+
 Door de kubische convergentie van de Rayleigh quoti\"ent iteratie heeft deze methode vaak de voorkeur over de inverse iteratie. Toch zijn er ook gevallen waar de inverse iteratie de voorkeur geniet. Er worden in deze tekst twee gevallen besproken:
 \begin{itemize}
 \item \underline{De matrix $A \in \mathbb{R}^{m\times m}$ is (zeer) groot:} In elke iteratiestap van de Rayleigh quoti\"ent iteratie moet een nieuwe matrix ge\"inverteerd worden. Hierdoor zijn er $\mathcal{O}(m^3)$ flops nodig per stap. Voor de inverse iteratie moet er een lineair stelsel worden opgelost in elke stap. Dit lijkt op het eerste zicht $\mathcal{O}(m^3)$ flops te vragen, maar als de matrix $A$ op $QR$-gefactoriseerd is, vermindert het aantal flops naar $\mathcal{O}(m^2)$. Hierdoor is de inverse iteratie beter geschikt voor grote matrices.
 \item \underline{De spectrale eigenschappen van $A$ zijn nauwelijks gekend}: Het doel is om een eigenpaar te vinden die het dichtst bij $\mu \in \mathbb{R}$ ligt, maar een goede startwaarde voor de eigenvector is niet gekend. De Rayleigh quoti\"ent iteratie vertrekt van een startwaarde van een eigenvector. Deze startwaarde is hier niet gekend dus is de inverse iteratie, die vertrekt van een startwaarde voor de eigenwaarde, beter geschikt.
 \end{itemize}
 
-\section{Jacobi-methode}
+\section{Jacobi-methode}\label{sec: jacobi}
 De Jacobi-methode steunt op de diagonalisatie van $2 \times 2$ symmetrische matrices met behulp van een orthogonale matrix $J$,
 \begin{align}\label{eq:jacobi}
 J^T\left[\begin{matrix}
@@ -167,6 +181,8 @@ c &s\\
 \end{align}
 
 \subsection{De co\"effici\"enten $c$ en $s$}
+\underline{\textbf{Opgave 4}}\\
+
 In deze sectie worden de co\"effici\"enten $c$ en $s$ van de matrix $J$ uit vergelijking (\ref{eq:cs}) bepaald zodat (\ref{eq:jacobi}) geldt. Aangezien $J$ een rotatie-matrix is, is de determinant van $j$ gelijk aan 1.
 \begin{align*}
 \det J = c^2 + s^2 = 1
@@ -183,8 +199,81 @@ Indien de niet-diagonaal elementen in vergelijking~(\ref{eq:jacobi}) worden bepa
 \frac{1}{2}\sin(2\theta)(a-b) + d\cos(2\theta) = 0
 \end{align*}
 Hieruit kan $\theta$ gehaald worden:
-\begin{align*}
+\begin{align}\label{eq:theta}
 \theta = \frac{1}{2}\arctan\left(\frac{2d}{b-a}\right)
-\end{align*}
+\end{align}
 Als $a$ gelijk is aan $b$ wordt $\theta$ gelijk aan $\frac{\pi}{4}$ aangezien voor deze hoek de boogtangens oneindig wordt.
+
+\subsection{Eigenwaardeontbinding}
+\underline{\textbf{Opgave 5}}\\
+
+De Jacobi methode kan gebruikt worden om de eigenwaarden ontbinding $VDV^T$ van een symmetrische matrix $A$ te berekenen. Hierbij is $D$ een diagonaalmatrix die de eigenwaarden bevat en $V$ een orthoognale matrix met de overeenkomstige eigenvectoren. In algoritme~\ref{alg:jacobi-methode} kan de pseudo-code voor dit algoritme gevonden worden. In dit algoritme wordt de $sweep$-methode gebruikt die in het handboek beschreven staat.
+
+\begin{algorithm}[caption={Jacobi-methode}, label={alg:jacobi-methode}]
+$n = \text{size}(A)$
+$V = I_n$
+$\text{error} = \|R_A\|_F$
+while error > tol do
+	neem het volgende element van de $sweep$
+	definieer $a$, $b$, $d$
+	bepaal $\theta$ met vergelijking (3)
+	stel de Jacobimatrix $J$ op
+	$A = J^TAJ$
+	$V = VJ$
+	$\text{error} = \|R_A\|_F$
+end
+\end{algorithm}
+
+Het algoritme wordt vervolgens ge\"implementeerd in MATLAB. In listing \ref{lst:jacobi} kan de code hiervan gevonden worden.\\
+
+\underline{\textbf{Opgave 6}}\\
+
+ Vervolgens wordt het algoritme getest op een $35\times35$ matrix. De frobeniusnorm $\|R_A\|_F$ van de bovendriehoekselementen wordt na elke iteratiestap berekend. In figuur~\ref{fig:jacobiFout} wordt $\|R_A\|_F$ afgebeeld in functie van het aantal iteratiestappen. De omcirkelde waarden zijn de iteratiestappen waarbij een volledige $sweep$ gedaan is. Het kruisje duid aan waar de norm onder de tolerantiegrens van $10^{-16}$ komt, hier is niet noodzakelijk een volledige $sweep$ gedaan. Er zijn in totaal dus acht volledige $sweeps$ nodig om de opgelegde tolerantie van $10^{-16}$ te bereiken. Dat wil zeggen dat de convergentie beter dan lineair is zoals in het handboek beschreven staat. In figuur~\ref{fig:sweeps} wordt de forbeniusnorm weergegeven in functie van het aantal $sweeps$. 
+
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.55]{../Afbeeldingen/fout-jacobi.eps}
+ \caption{Frobeniusnorm $\|R_A\|_F$ in functie van het aantal iteratiestappen $n$}
+ \label{fig:jacobiFout}
+ \end{figure} 
+ 
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.55]{../Afbeeldingen/fout-jacobiSweep.eps}
+ \caption{Frobeniusnorm $\|R_A\|_F$ in functie van het aantal volledige $sweeps$ $n$}
+ \label{fig:sweeps}
+ \end{figure}
+\newpage
+
+
+\lstinputlisting[caption={jacobi.m}, label = {lst:jacobi}]{../Code/jacobi.m}
+
+\section{Geconjugeerde gradi\"enten} \label{sec: geconjugeerde gradienten}
+\underline{\textbf{Opgave 7a}}\\
+
+Bij de methode van de conjugeerde gradi\"enten  toegepast op een positief definiete symmetrische matrix probleem $Ax = b$, met $\kappa(A)$ het conditiegetal van de matrix $A$, geldt de volgende ongelijkheid:
+\begin{align}\label{eq:ongelijkheidCG}
+\left.\frac{\|e_n\|_A}{\|e_0\|_A} \leq 2 \middle/ \left[ \left( \frac{\sqrt{\kappa(A)} + 1}{\sqrt{\kappa(A)} - 1}\right)^n + \left(\frac{\sqrt{\kappa(A)} + 1}{\sqrt{\kappa(A)} - 1}\right)^{-n}\right]\right. \leq 2\left(\frac{\sqrt{\kappa(A)} - 1}{\sqrt{\kappa(A)} + 1}\right)^n
+\end{align}
+Indien de waarden voor $\|e_0\|_A = 1$ en $\|e_{10}\|_A = 2^{-9}$ bekend zijn, kan er een ondergrens voor $\kappa(A)$ bepaald worden door vergelijking (\ref{eq:ongelijkheidCG}) in te vullen. Dit geeft volgende oplossing:
+\begin{align*}
+2\left(\frac{\sqrt{\kappa(A)} - 1}{\sqrt{\kappa(A)} + 1}\right)^{10} &\geq \frac{\|e_{10}\|_A}{\|e_0\|_A} = 2^{-9}\\
+  \left(\frac{\sqrt{\kappa(A)} - 1}{\sqrt{\kappa(A)} + 1}\right)^{10} &\geq 2^{-10}\\
+ \frac{\sqrt{\kappa(A)} - 1}{\sqrt{\kappa(A)} + 1} &\geq \frac{1}{2}\\
+ 2\sqrt{\kappa(A)} - 2 &\geq \sqrt{\kappa(A)} + 1\\
+ \sqrt{\kappa(A)} &\geq 3\\
+ \kappa(A) &\geq 9
+ \end{align*}
+ \underline{\textbf{Opgave 7b}}\\
+
+ 
+Het conditiegetal $\kappa(A)$ heeft dus een ondergrens van 9. Deze ondergrens geeft geen extra informatie over $\|e_n\|_A$ voor $n$ groter dan 10. Wel kan uit volgende eigenschap:
+\begin{align*}
+\|e_n\|_A \leq \|e_{n-1}\|_A
+\end{align*}
+een bovengrens voor $\|e_{20}\|_A$ bepaald worden. 
+\begin{align*}
+\|e_{20}\|_A \leq \|e_{10}\|_A = 2^{-9}
+\end{align*}
+Een striktere bovengrens is niet mogelijk met de gegevens die ter beschikking zijn.
 \end{document}

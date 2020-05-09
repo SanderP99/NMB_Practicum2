@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=latex 2020.1.8)  6 MAY 2020 14:49
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=latex 2020.1.8)  9 MAY 2020 10:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -706,10 +706,6 @@ Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 279.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 279.
 Package rerunfilecheck Info: File `verslag.out' has not changed.
 (rerunfilecheck)             Checksum: 8A2D3C550BAAFE93E680BF8BE87A3C11;633.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 279.
  ) 
 Here is how much of TeX's memory you used:
@@ -719,6 +715,6 @@ Here is how much of TeX's memory you used:
  14197 multiletter control sequences out of 15000+600000
  16490 words of font info for 64 fonts, out of 8000000 for 9000
  372 hyphenation exceptions out of 8191
- 42i,14n,42p,900b,1805s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,14n,42p,865b,1805s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on verslag.dvi (9 pages, 62136 bytes).
+Output written on verslag.dvi (9 pages, 62100 bytes).

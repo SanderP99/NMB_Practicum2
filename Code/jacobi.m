@@ -16,7 +16,7 @@ while err > tol
     
     % Theta bepalen
     if a == b
-        theta = pi / 4;
+        theta = pi / 2;
     else
         theta = 0.5 * atan(2 * d / (b - a));
     end
